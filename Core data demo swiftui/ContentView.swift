@@ -38,6 +38,7 @@ struct ContentView: View {
 
                             Button(role: .destructive) {
                                 viewContext.delete(person)
+                                try! viewContext.save()
                             } label: {
                                 Label("Delete", systemImage: "trash.fill")
                             }
