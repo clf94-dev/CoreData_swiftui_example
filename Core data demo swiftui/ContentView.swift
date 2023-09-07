@@ -16,7 +16,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     
-    @FetchRequest(sortDescriptors: []) var people: FetchedResults<
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)]) var people: FetchedResults<
         Person>
     var body: some View {
         VStack{
@@ -26,7 +26,7 @@ struct ContentView: View {
             List {
                 ForEach(people) {
                     person in
-                    Text(person.name ?? "No name")
+                    Text("\(person.name ?? "No name"), age: \(person.age)")
                         .swipeActions(allowsFullSwipe: false) {
                             Button {
                                 person.name = "Joe"
@@ -75,7 +75,7 @@ struct ContentView: View {
         withAnimation {
             let newPerson = Person(context: viewContext)
             newPerson.name = "Tom"
-            newPerson.age = 19
+            newPerson.age = Int64.random(in: 1...30)
             
             do {
                 try viewContext.save()
