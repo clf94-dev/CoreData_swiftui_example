@@ -27,6 +27,21 @@ struct ContentView: View {
                 ForEach(people) {
                     person in
                     Text(person.name ?? "No name")
+                        .swipeActions(allowsFullSwipe: false) {
+                                                    Button {
+                                                        person.name = "Joe"
+                                                        try! viewContext.save()
+                                                    } label: {
+                                                        Label("Mute", systemImage: "bell.slash.fill")
+                                                    }
+                                                    .tint(.indigo)
+
+                                                    Button(role: .destructive) {
+                                                        print("Deleting conversation")
+                                                    } label: {
+                                                        Label("Delete", systemImage: "trash.fill")
+                                                    }
+                                                }
                 }
             }
         }
