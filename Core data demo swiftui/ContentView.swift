@@ -15,33 +15,58 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Item>
-
+    
+    @FetchRequest(sortDescriptors: []) var people: FetchedResults<
+        Person>
     var body: some View {
-        NavigationView {
+        VStack{
+            Button(action: addPerson) {
+                Label("Add person", systemImage: "plus")
+            }
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                ForEach(people) {
+                    person in
+                    Text(person.name ?? "No name")
                 }
             }
-            Text("Select an item")
+        }
+//        NavigationView {
+//            List {
+//                ForEach(items) { item in
+//                    NavigationLink {
+//                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+//                    } label: {
+//                        Text(item.timestamp!, formatter: itemFormatter)
+//                    }
+//                }
+//                .onDelete(perform: deleteItems)
+//            }
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
+//                ToolbarItem {
+//                    Button(action: addItem) {
+//                        Label("Add Item", systemImage: "plus")
+//                    }
+//                }
+//            }
+//            Text("Select an item")
+//        }
+    }
+ 
+    private func addPerson() {
+        withAnimation {
+            let newPerson = Person(context: viewContext)
+            newPerson.name = "Tom"
+            newPerson.age = 19
+            
+            do {
+                try viewContext.save()
+            } catch {
+            }
         }
     }
-
     private func addItem() {
         withAnimation {
             let newItem = Item(context: viewContext)
