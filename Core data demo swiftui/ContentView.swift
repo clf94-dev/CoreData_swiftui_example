@@ -28,20 +28,20 @@ struct ContentView: View {
                     person in
                     Text(person.name ?? "No name")
                         .swipeActions(allowsFullSwipe: false) {
-                                                    Button {
-                                                        person.name = "Joe"
-                                                        try! viewContext.save()
-                                                    } label: {
-                                                        Label("Mute", systemImage: "bell.slash.fill")
-                                                    }
-                                                    .tint(.indigo)
+                            Button {
+                                person.name = "Joe"
+                                try! viewContext.save()
+                            } label: {
+                                Label("Mute", systemImage: "bell.slash.fill")
+                            }
+                            .tint(.indigo)
 
-                                                    Button(role: .destructive) {
-                                                        print("Deleting conversation")
-                                                    } label: {
-                                                        Label("Delete", systemImage: "trash.fill")
-                                                    }
-                                                }
+                            Button(role: .destructive) {
+                                viewContext.delete(person)
+                            } label: {
+                                Label("Delete", systemImage: "trash.fill")
+                            }
+                        }
                 }
             }
         }
@@ -82,6 +82,7 @@ struct ContentView: View {
             }
         }
     }
+    
     private func addItem() {
         withAnimation {
             let newItem = Item(context: viewContext)
