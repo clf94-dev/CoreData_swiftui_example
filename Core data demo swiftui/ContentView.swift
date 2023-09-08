@@ -16,14 +16,21 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)],
-                   predicate: NSPredicate(format: "name contains 'Joe'") ) var people: FetchedResults<
-        Person>
+//    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)],
+//                   predicate: NSPredicate(format: "name contains 'Joe'") ) var people: FetchedResults<
+//        Person>
+    @State var people = [Person]()
+    @State var filterByText = ""
     var body: some View {
         VStack{
             Button(action: addPerson) {
                 Label("Add person", systemImage: "plus")
             }
+            TextField("Filter text", text: $filterByText){ _ in
+                fetchData()
+            }
+                .border(Color.black, width: 1)
+                .padding()
             List {
                 ForEach(people) {
                     person in
@@ -71,7 +78,26 @@ struct ContentView: View {
 //            Text("Select an item")
 //        }
     }
- 
+    func fetchData(){
+        // create fetch request
+        let request = Person.fetchRequest()
+        
+        // set sort descriptor and predicates
+        request.sortDescriptors = [NSSortDescriptor(key: "age", ascending: true)]
+        request.predicate = NSPredicate(format: "name contains[c] %@", filterByText)
+        
+        // execute the fetch
+        DispatchQueue.main.async {
+            do {
+                let results = try viewContext.fetch(request)
+                // Update the state property
+                
+                self.people = results
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
     private func addPerson() {
         withAnimation {
             let newPerson = Person(context: viewContext)
