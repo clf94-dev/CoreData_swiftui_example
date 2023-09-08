@@ -16,7 +16,8 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)]) var people: FetchedResults<
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "age", ascending: true)],
+                   predicate: NSPredicate(format: "name contains 'Joe'") ) var people: FetchedResults<
         Person>
     var body: some View {
         VStack{
