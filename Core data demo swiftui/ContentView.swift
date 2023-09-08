@@ -26,9 +26,10 @@ struct ContentView: View {
             Button(action: addPerson) {
                 Label("Add person", systemImage: "plus")
             }
-            TextField("Filter text", text: $filterByText){ _ in
-                fetchData()
-            }
+            TextField("Filter text", text: $filterByText)
+//            { _ in
+//                fetchData()
+//            }
                 .border(Color.black, width: 1)
                 .padding()
             List {
@@ -53,6 +54,8 @@ struct ContentView: View {
                         }
                 }
             }
+        }.onChange(of: filterByText) { _ in
+            fetchData()
         }
 //        NavigationView {
 //            List {
